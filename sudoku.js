@@ -1,24 +1,99 @@
 var data = ".94...13..............76..2.8..1.....32.........2...6.....5.4.......8..7..63.4..8",
     dataArray = data.split(''),
     puzzle = {};
-
+    var row1 = '',
+        row2 = '',
+        row3 = '',
+        row4 = '',
+        row5 = '',
+        row6 = '',
+        row7 = '',
+        row8 = '',
+        row9 = '';
 
 
 dataArray.forEach(function (value, index){
   puzzle[index + 1] = {"possibles": [],
                         "value":  value};
+  if (index < 9) {
+    puzzle[index + 1].row = 1
+  } else if (index < 18) {
+    puzzle[index + 1].row = 2
+  } else if (index < 27) {
+    puzzle[index + 1].row = 3
+  } else if (index < 36) {
+    puzzle[index + 1].row = 4
+  } else if (index < 45) {
+    puzzle[index + 1].row = 5
+  } else if (index < 54) {
+    puzzle[index + 1].row = 6
+  } else if (index < 63) {
+    puzzle[index + 1].row = 7
+  } else if (index < 72) {
+    puzzle[index + 1].row = 8
+  } else {
+    puzzle[index + 1].row = 9
+  }
 });
 
+function columnBuilder(puzzle) {
+  Object.keys(puzzle).forEach(function (value, index) {
+    if ((index + 1)%9 == 0) {
+      puzzle[index + 1].column = 9
+    } else if ((index + 2)%9 == 0) {
+      puzzle[index + 1].column = 8
+    } else if ((index + 3)%9 == 0) {
+      puzzle[index + 1].column = 7
+    } else if ((index + 4)%9 == 0) {
+      puzzle[index + 1].column = 6
+    } else if ((index + 5)%9 == 0) {
+      puzzle[index + 1].column = 5
+    } else if ((index + 6)%9 == 0) {
+      puzzle[index + 1].column = 4
+    } else if ((index + 7)%9 == 0) {
+      puzzle[index + 1].column = 3
+    } else if ((index + 8)%9 == 0) {
+      puzzle[index + 1].column = 2
+    } else if ((index + 9)%9 == 0) {
+      puzzle[index + 1].column = 1
+    }
+  });
+};
+
+function quadrantBuilder(puzzle) {
+  Object.keys(puzzle).forEach(function (value, index) {
+    if (puzzle[index + 1].row < 4 && puzzle[index + 1].column < 4) {
+      puzzle[index + 1].quadrant = 1
+    } else if (puzzle[index + 1].row < 4 && puzzle[index + 1].column < 7) {
+      puzzle[index + 1].quadrant = 2
+    } else if (puzzle[index + 1].row < 4 && puzzle[index + 1].column <= 9) {
+      puzzle[index + 1].quadrant = 3
+    } else if (puzzle[index + 1].row < 7 && puzzle[index + 1].column < 4) {
+      puzzle[index + 1].quadrant = 4
+    } else if (puzzle[index + 1].row < 7 && puzzle[index + 1].column < 7) {
+      puzzle[index + 1].quadrant = 5
+    } else if (puzzle[index + 1].row < 7 && puzzle[index + 1].column <= 9) {
+      puzzle[index + 1].quadrant = 6
+    } else if (puzzle[index + 1].row <= 9 && puzzle[index + 1].column < 4) {
+      puzzle[index + 1].quadrant = 7
+    } else if (puzzle[index + 1].row <= 9 && puzzle[index + 1].column < 7) {
+      puzzle[index + 1].quadrant = 8
+    } else if (puzzle[index + 1].row <= 9 && puzzle[index + 1].column <= 9) {
+      puzzle[index + 1].quadrant = 9
+    }
+  })
+}
+
 function boardPrinter(puzzle) {
-  var row1 = '',
-      row2 = '',
-      row3 = '',
-      row4 = '',
-      row5 = '',
-      row6 = '',
-      row7 = '',
-      row8 = '',
-      row9 = '';
+  // var row1 = '',
+  //     row2 = '',
+  //     row3 = '',
+  //     row4 = '',
+  //     row5 = '',
+  //     row6 = '',
+  //     row7 = '',
+  //     row8 = '',
+  //     row9 = '';
   console.log(' _________');
   Object.keys(puzzle).forEach(function (value, index){
     if (index < 9) {
@@ -53,4 +128,39 @@ function boardPrinter(puzzle) {
   console.log(' _________');
 };
 
+
+
+function fillingInitialPossibles(puzzle) {
+  Object.keys(puzzle).forEach(function (value, index) {
+    if (puzzle[index + 1].value != '.') {
+      puzzle[index + 1].possibles.push(puzzle[index + 1].value)
+    }
+  });
+};
+
+function checkSolved(puzzle) {
+  var solved = true;
+  Object.keys(puzzle).forEach(function (value, index) {
+    if (puzzle[index + 1].possibles.length != 1) {
+      solved = false
+    }
+  });
+  if (solved == false) {
+    console.log("Puzzle not solved. Try again.")
+  } else if  (solved == true) {
+    console.log("Puzzle Solved!");
+  }
+};
+
+// function slicingAndDicing(puzzle) {
+//   Object.keys(puzzle).forEach(function (value, index) {
+//
+//   })
+// }
+
 boardPrinter(puzzle);
+fillingInitialPossibles(puzzle);
+checkSolved(puzzle);
+columnBuilder(puzzle);
+quadrantBuilder(puzzle);
+console.log(puzzle);
