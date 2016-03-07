@@ -1,0 +1,10 @@
+{
+  "name": "new_sudoku_solver",
+  "version": "1.0.0",
+  "description": "Solving a sudoku puzzle",
+  "main": "",
+  "author": "Andrew DuBrock",
+  "dependencies": {
+    "lodash": "^3.10.1"
+  }
+}

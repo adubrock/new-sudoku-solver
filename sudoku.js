@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var data = ".94...13..............76..2.8..1.....32.........2...6.....5.4.......8..7..63.4..8",
     dataArray = data.split(''),
     puzzle = {};
@@ -138,6 +139,28 @@ function fillingInitialPossibles(puzzle) {
   });
 };
 
+function firstCheckForPossibles(puzzle) {
+  Object.keys(puzzle).forEach(function (value, index) {
+  if (puzzle[index + 1].possibles.length != 1) {
+    Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
+      var notPossibles = [];
+      var possiblesToAdd = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      if ((puzzle[index + 1].row == puzzle[indexInternal +1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
+        console.log(puzzle[index + 1].row);
+        console.log(puzzle[indexInternal +1].row);
+        notPossibles = notPossibles.push(puzzle[indexInternal + 1].value);
+        // console.log(puzzle[indexInternal + 1].value);
+        // notPossibles = _.uniq(notPossibles);
+        //
+        // possiblesToAdd = _.difference(possiblesToAdd, notPossibles);
+        // console.log(possiblesToAdd);
+      }
+      // console.log(notPossibles);
+    })
+  }
+  });
+};
+
 function checkSolved(puzzle) {
   var solved = true;
   Object.keys(puzzle).forEach(function (value, index) {
@@ -159,8 +182,9 @@ function checkSolved(puzzle) {
 // }
 
 boardPrinter(puzzle);
-fillingInitialPossibles(puzzle);
-checkSolved(puzzle);
 columnBuilder(puzzle);
 quadrantBuilder(puzzle);
+fillingInitialPossibles(puzzle);
+checkSolved(puzzle);
+firstCheckForPossibles(puzzle);
 console.log(puzzle);
