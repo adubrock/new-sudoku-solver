@@ -95,7 +95,7 @@ function boardPrinter(puzzle) {
   //     row7 = '',
   //     row8 = '',
   //     row9 = '';
-  console.log(' _________');
+  console.log(' –––––––––––');
   Object.keys(puzzle).forEach(function (value, index){
     if (index < 9) {
       row1 = row1.concat(puzzle[value].value)
@@ -117,16 +117,18 @@ function boardPrinter(puzzle) {
       row9 = row9.concat(puzzle[value].value)
     }
   });
-  console.log('|' + row1 + '|');
-  console.log('|' + row2 + '|');
-  console.log('|' + row3 + '|');
-  console.log('|' + row4 + '|');
-  console.log('|' + row5 + '|');
-  console.log('|' + row6 + '|');
-  console.log('|' + row7 + '|');
-  console.log('|' + row8 + '|');
-  console.log('|' + row9 + '|');
-  console.log(' _________');
+  console.log('|' + row1.substr(0, 3) + '|' + row1.substr(3, 3) + '|' + row1.substr(6, 3) + '|');
+  console.log('|' + row2.substr(0, 3) + '|' + row2.substr(3, 3) + '|' + row2.substr(6, 3) + '|');
+  console.log('|' + row3.substr(0, 3) + '|' + row3.substr(3, 3) + '|' + row3.substr(6, 3) + '|');
+  console.log(' –––––––––––');
+  console.log('|' + row4.substr(0, 3) + '|' + row4.substr(3, 3) + '|' + row4.substr(6, 3) + '|');
+  console.log('|' + row5.substr(0, 3) + '|' + row5.substr(3, 3) + '|' + row5.substr(6, 3) + '|');
+  console.log('|' + row6.substr(0, 3) + '|' + row6.substr(3, 3) + '|' + row6.substr(6, 3) + '|');
+  console.log(' –––––––––––');
+  console.log('|' + row7.substr(0, 3) + '|' + row7.substr(3, 3) + '|' + row7.substr(6, 3) + '|');
+  console.log('|' + row8.substr(0, 3) + '|' + row8.substr(3, 3) + '|' + row8.substr(6, 3) + '|');
+  console.log('|' + row9.substr(0, 3) + '|' + row9.substr(3, 3) + '|' + row9.substr(6, 3) + '|');
+  console.log(' –––––––––––');
 };
 
 
@@ -142,24 +144,34 @@ function fillingInitialPossibles(puzzle) {
 function firstCheckForPossibles(puzzle) {
   Object.keys(puzzle).forEach(function (value, index) {
   if (puzzle[index + 1].possibles.length != 1) {
+    var notPossibles = [];
+    var possiblesToAdd = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
     Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
-      var notPossibles = [];
-      var possiblesToAdd = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
       if ((puzzle[index + 1].row == puzzle[indexInternal +1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
-        console.log(puzzle[index + 1].row);
-        console.log(puzzle[indexInternal +1].row);
-        notPossibles = notPossibles.push(puzzle[indexInternal + 1].value);
+        // console.log(puzzle[index + 1].row);
+        // console.log(puzzle[indexInternal +1].row);
+        notPossibles.push(puzzle[indexInternal + 1].value);
         // console.log(puzzle[indexInternal + 1].value);
-        // notPossibles = _.uniq(notPossibles);
+        notPossibles = _.uniq(notPossibles);
         //
-        // possiblesToAdd = _.difference(possiblesToAdd, notPossibles);
+        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);
         // console.log(possiblesToAdd);
       }
-      // console.log(notPossibles);
+      // console.log(possiblesToAdd);
     })
+    // console.log(possiblesToAdd);
+    puzzle[index + 1].possibles = possiblesToAdd;
   }
   });
 };
+
+function possiblesToValue(puzzle) {
+  Object.keys(puzzle).forEach(function (value, index) {
+    if ((puzzle[index + 1].possibles.length == 1) && (puzzle[index + 1].value == '.')) {
+      puzzle[index + 1].value = puzzle[index + 1].possibles.join();
+    }
+  });
+}
 
 function checkSolved(puzzle) {
   var solved = true;
@@ -177,7 +189,9 @@ function checkSolved(puzzle) {
 
 // function slicingAndDicing(puzzle) {
 //   Object.keys(puzzle).forEach(function (value, index) {
-//
+//     if (puzzle[index + 1].value == '.') {
+//       Object.keys(puzzle)
+//     }
 //   })
 // }
 
@@ -187,4 +201,6 @@ quadrantBuilder(puzzle);
 fillingInitialPossibles(puzzle);
 checkSolved(puzzle);
 firstCheckForPossibles(puzzle);
+possiblesToValue(puzzle);
 console.log(puzzle);
+boardPrinter(puzzle);
