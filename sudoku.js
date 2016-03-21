@@ -1,7 +1,8 @@
+'use strict'
 var _ = require('lodash');
-var data = ".94...13..............76..2.8..1.....32.........2...6.....5.4.......8..7..63.4..8",
+var data = ".3..1........427.3.2.9.6.4.5...2....349..............1.....9.....6....8...5..346.",
     dataArray = data.split(''),
-    puzzle = {};
+    puzzleToSolve = {};
     var row1 = '',
         row2 = '',
         row3 = '',
@@ -11,29 +12,30 @@ var data = ".94...13..............76..2.8..1.....32.........2...6.....5.4.......
         row7 = '',
         row8 = '',
         row9 = '';
+    var puzzleStates = [];
 
 
 dataArray.forEach(function (value, index){
-  puzzle[index + 1] = {"possibles": [],
+  puzzleToSolve[index + 1] = {"possibles": [],
                         "value":  value};
   if (index < 9) {
-    puzzle[index + 1].row = 1
+    puzzleToSolve[index + 1].row = 1
   } else if (index < 18) {
-    puzzle[index + 1].row = 2
+    puzzleToSolve[index + 1].row = 2
   } else if (index < 27) {
-    puzzle[index + 1].row = 3
+    puzzleToSolve[index + 1].row = 3
   } else if (index < 36) {
-    puzzle[index + 1].row = 4
+    puzzleToSolve[index + 1].row = 4
   } else if (index < 45) {
-    puzzle[index + 1].row = 5
+    puzzleToSolve[index + 1].row = 5
   } else if (index < 54) {
-    puzzle[index + 1].row = 6
+    puzzleToSolve[index + 1].row = 6
   } else if (index < 63) {
-    puzzle[index + 1].row = 7
+    puzzleToSolve[index + 1].row = 7
   } else if (index < 72) {
-    puzzle[index + 1].row = 8
+    puzzleToSolve[index + 1].row = 8
   } else {
-    puzzle[index + 1].row = 9
+    puzzleToSolve[index + 1].row = 9
   }
 });
 
@@ -148,18 +150,11 @@ function firstCheckForPossibles(puzzle) {
     var possiblesToAdd = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
     Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
       if ((puzzle[index + 1].row == puzzle[indexInternal +1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
-        // console.log(puzzle[index + 1].row);
-        // console.log(puzzle[indexInternal +1].row);
         notPossibles.push(puzzle[indexInternal + 1].value);
-        // console.log(puzzle[indexInternal + 1].value);
         notPossibles = _.uniq(notPossibles);
-        //
-        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);
-        // console.log(possiblesToAdd);
+        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);        // console.log(possiblesToAdd);
       }
-      // console.log(possiblesToAdd);
     })
-    // console.log(possiblesToAdd);
     puzzle[index + 1].possibles = possiblesToAdd;
   }
   });
@@ -172,6 +167,11 @@ function possiblesToValue(puzzle) {
     }
   });
 }
+// These are the recurring functions
+
+function solver(puzzle) {
+  checkSolved(puzzle);
+};
 
 function checkSolved(puzzle) {
   var solved = true;
@@ -181,26 +181,130 @@ function checkSolved(puzzle) {
     }
   });
   if (solved == false) {
-    console.log("Puzzle not solved. Try again.")
+    // console.log("Puzzle not solved. Try again.");
+    guess(puzzle);
+    // boardPrinter(guessedPuzzle[0]);
+    // var check = checkForPossibles(guessedPuzzle[0]);
+    // console.log (check);
   } else if  (solved == true) {
     console.log("Puzzle Solved!");
+    console.log(puzzle);
+    boardPrinter(puzzle);
   }
 };
 
+function guess(puzzle) {
+  var guessedPuzzle;
+  var notGuessedPuzzle;
+  // var x;
+  // var y;
+  Object.keys(puzzle).forEach(function (value, index) {
+    if (puzzle[index + 1].possibles.length === 2 && !guessedPuzzle ) {
+      guessedPuzzle = {};
+      notGuessedPuzzle = {};
+      // var stringy = JSON.stringify(puzzle);
+      guessedPuzzle = JSON.parse(JSON.stringify(puzzle));
+      notGuessedPuzzle = JSON.parse(JSON.stringify(puzzle));
+      // console.log(guessedPuzzle);
+      // Object.assign(guessedPuzzle, puzzle);
+      // Object.assign(notGuessedPuzzle, puzzle);
+      // x = (index + 1);
+      // guessedPuzzle = puzzle;
+      // notGuessedPuzzle = puzzle;
+      // console.log(notGuessedPuzzle[index + 1]);
+      guessedPuzzle[index + 1].value = guessedPuzzle[index + 1].possibles[0];
+      // console.log(notGuessedPuzzle[index + 1]);
+      notGuessedPuzzle[index + 1].value = notGuessedPuzzle[index + 1].possibles[1];
+      // console.log(notGuessedPuzzle[index + 1]);
+      //
+      // console.log(guessedPuzzle[index +1].possibles)
+      guessedPuzzle[index + 1].possibles = [guessedPuzzle[index + 1].value];
+      // console.log(guessedPuzzle[index +1].possibles);
+      notGuessedPuzzle[index + 1].possibles = [notGuessedPuzzle[index + 1].value];
+      // console.log(notGuessedPuzzle[index +1].possibles)
+      console.log('should run once');
+      // return;
+      // console.log(puzzle);
+    }
+  });
+  // console.log(x);
+  // guessedPuzzle[x].value = guessedPuzzle[x].possibles[0];
+  // console.log(notGuessedPuzzle[x]);
+  // notGuessedPuzzle[x].value = notGuessedPuzzle[x].possibles[1];
+  // console.log(notGuessedPuzzle[x]);
+
+  // console.log(guessedPuzzle[index +1].possibles)
+  // guessedPuzzle[x].possibles = [guessedPuzzle[x].value];
+  // console.log(guessedPuzzle[index +1].possibles);
+  // notGuessedPuzzle[x].possibles = [notGuessedPuzzle[x].value];
+
+
+  // console.log(guessedPuzzle);
+  puzzleStates.push(notGuessedPuzzle);
+  // return [guessedPuzzle, notGuessedPuzzle];
+  checkForPossibles(guessedPuzzle);
+};
+
+function checkForPossibles(puzzle) {
+  // console.log(puzzle);
+  Object.keys(puzzle).forEach(function (value, index) {
+  if (puzzle[index + 1].possibles.length != 1) {
+    var notPossibles = [];
+    var possiblesToAdd = puzzle[index + 1].possibles;
+    Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
+      if ((puzzle[index + 1].row == puzzle[indexInternal +1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
+        notPossibles.push(puzzle[indexInternal + 1].value);
+        notPossibles = _.uniq(notPossibles);
+        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);        // console.log(possiblesToAdd);
+      }
+    });
+    puzzle[index + 1].possibles = possiblesToAdd;
+    console.log(possiblesToAdd);
+    if (possiblesToAdd.length == 0) {
+      puzzle = puzzleStates.shift();
+      // console.log(possiblesToAdd);
+      console.log("ERROR!!");
+      // return puzzle;
+    }
+  }
+  });
+  console.log("did we get here?")
+  possiblesToValue2(puzzle);
+};
+
+function possiblesToValue2(puzzle) {
+  Object.keys(puzzle).forEach(function (value, index) {
+    if ((puzzle[index + 1].possibles.length == 1) && (puzzle[index + 1].value == '.')) {
+      puzzle[index + 1].value = puzzle[index + 1].possibles.join();
+    }
+  });
+  // boardPrinter(puzzle);
+  solver(puzzle);
+}
 // function slicingAndDicing(puzzle) {
+//   var column = sliceColumns(puzzle),
+//       row = checkRow(puzzle);
+//
 //   Object.keys(puzzle).forEach(function (value, index) {
 //     if (puzzle[index + 1].value == '.') {
 //       Object.keys(puzzle)
 //     }
 //   })
 // }
+//
+// function sliceColumns(puzzle) {
+//
+// }
 
-boardPrinter(puzzle);
-columnBuilder(puzzle);
-quadrantBuilder(puzzle);
-fillingInitialPossibles(puzzle);
-checkSolved(puzzle);
-firstCheckForPossibles(puzzle);
-possiblesToValue(puzzle);
-console.log(puzzle);
-boardPrinter(puzzle);
+// boardPrinter(puzzleToSolve);
+columnBuilder(puzzleToSolve);
+quadrantBuilder(puzzleToSolve);
+fillingInitialPossibles(puzzleToSolve);
+firstCheckForPossibles(puzzleToSolve);
+possiblesToValue(puzzleToSolve);
+// console.log(puzzle);
+solver(puzzleToSolve);
+// order: solver, checkSolved, checkForPossibles, possiblesToValue2, solver
+// checkForPossibles(puzzle);
+// checkSolved(puzzle);
+// console.log(puzzle);
