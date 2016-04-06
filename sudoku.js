@@ -153,7 +153,7 @@ function firstCheckForPossibles(puzzle) {
       if ((puzzle[index + 1].row == puzzle[indexInternal +1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
         notPossibles.push(puzzle[indexInternal + 1].value);
         notPossibles = _.uniq(notPossibles);
-        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);        // console.log(possiblesToAdd);
+        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);
       }
     })
     puzzle[index + 1].possibles = possiblesToAdd;
@@ -182,16 +182,11 @@ function checkSolved(puzzle) {
     }
   });
   if (solved == false) {
-    // console.log("Puzzle not solved. Try again.");
     console.log('sending following puzzle to guess');
     boardPrinter(puzzle);
     guess(puzzle);
-    // boardPrinter(guessedPuzzle[0]);
-    // var check = checkForPossibles(guessedPuzzle[0]);
-    // console.log (check);
   } else if  (solved == true) {
     console.log("Puzzle Solved!");
-    // console.log(puzzle);
     boardPrinter(puzzle);
   }
 };
@@ -200,36 +195,18 @@ function guess(puzzle) {
   var guessedPuzzle;
   var notGuessedPuzzle;
   var thirdNotGuessedPuzzle;
-  // var x;
-  // var y;
   Object.keys(puzzle).forEach(function (value, index) {
     if (puzzle[index + 1].possibles.length === 2 && !guessedPuzzle) {
       guessedPuzzle = {};
       notGuessedPuzzle = {};
-      // var stringy = JSON.stringify(puzzle);
       guessedPuzzle = JSON.parse(JSON.stringify(puzzle));
       notGuessedPuzzle = JSON.parse(JSON.stringify(puzzle));
-      // console.log(guessedPuzzle);
-      // Object.assign(guessedPuzzle, puzzle);
-      // Object.assign(notGuessedPuzzle, puzzle);
-      // x = (index + 1);
-      // guessedPuzzle = puzzle;
-      // notGuessedPuzzle = puzzle;
-      // console.log(notGuessedPuzzle[index + 1]);
       guessedPuzzle[index + 1].value = guessedPuzzle[index + 1].possibles[0];
-      // console.log(notGuessedPuzzle[index + 1]);
       notGuessedPuzzle[index + 1].value = notGuessedPuzzle[index + 1].possibles[1];
-      // console.log(notGuessedPuzzle[index + 1]);
-      //
-      // console.log(guessedPuzzle[index +1].possibles)
       guessedPuzzle[index + 1].possibles = [guessedPuzzle[index + 1].value];
-      // console.log(guessedPuzzle[index +1].possibles);
       notGuessedPuzzle[index + 1].possibles = [notGuessedPuzzle[index + 1].value];
-      // console.log(notGuessedPuzzle[index +1].possibles)
       console.log('should run once');
       console.log('guessed at ' + (index + 1));
-      // return;
-      // console.log(puzzle);
     }
   });
   if (!guessedPuzzle) {
@@ -238,33 +215,17 @@ function guess(puzzle) {
         guessedPuzzle = {};
         notGuessedPuzzle = {};
         thirdNotGuessedPuzzle = {};
-        // var stringy = JSON.stringify(puzzle);
         guessedPuzzle = JSON.parse(JSON.stringify(puzzle));
         notGuessedPuzzle = JSON.parse(JSON.stringify(puzzle));
         thirdNotGuessedPuzzle = JSON.parse(JSON.stringify(puzzle));
-        // console.log(guessedPuzzle);
-        // Object.assign(guessedPuzzle, puzzle);
-        // Object.assign(notGuessedPuzzle, puzzle);
-        // x = (index + 1);
-        // guessedPuzzle = puzzle;
-        // notGuessedPuzzle = puzzle;
-        // console.log(notGuessedPuzzle[index + 1]);
         guessedPuzzle[index + 1].value = guessedPuzzle[index + 1].possibles[0];
-        // console.log(notGuessedPuzzle[index + 1]);
         notGuessedPuzzle[index + 1].value = notGuessedPuzzle[index + 1].possibles[1];
         thirdNotGuessedPuzzle[index + 1].value = thirdNotGuessedPuzzle[index + 1].possibles[2];
-        // console.log(notGuessedPuzzle[index + 1]);
-        //
-        // console.log(guessedPuzzle[index +1].possibles)
         guessedPuzzle[index + 1].possibles = [guessedPuzzle[index + 1].value];
-        // console.log(guessedPuzzle[index +1].possibles);
         notGuessedPuzzle[index + 1].possibles = [notGuessedPuzzle[index + 1].value];
-        // console.log(notGuessedPuzzle[index +1].possibles)
         thirdNotGuessedPuzzle[index + 1].possibles = [thirdNotGuessedPuzzle[index + 1].value];
         console.log('should run once');
         console.log('Three-way guessed at ' + (index + 1));
-        // return;
-        // console.log(puzzle);
       }
     });
   }
@@ -272,8 +233,6 @@ function guess(puzzle) {
     console.log('guessed puzzle undefined');
     console.log(puzzle);
     possiblesToValue2(JSON.parse(puzzleStates.shift()));
-
-    // boardPrinter(puzzle);
   }
   else {
     puzzleStates.push(JSON.stringify(notGuessedPuzzle));
@@ -282,21 +241,11 @@ function guess(puzzle) {
     }
     console.log('pushed to puzzle states');
     console.log('puzzle states length = ' + puzzleStates.length);
-    // return [guessedPuzzle, notGuessedPuzzle];
     checkForPossibles(guessedPuzzle);
   }
-  // puzzleStates.push(JSON.stringify(notGuessedPuzzle));
-  // if (thirdNotGuessedPuzzle) {
-  //   puzzleStates.push(JSON.stringify(thirdNotGuessedPuzzle));
-  // }
-  // console.log('pushed to puzzle states');
-  // console.log('puzzle states length = ' + puzzleStates.length);
-  // // return [guessedPuzzle, notGuessedPuzzle];
-  // checkForPossibles(guessedPuzzle);
 };
 
 function checkForPossibles(puzzle) {
-  // console.log(puzzle);
   var error = false;
   Object.keys(puzzle).forEach(function (value, index) {
   if (puzzle[index + 1].possibles.length != 1) {
@@ -305,36 +254,17 @@ function checkForPossibles(puzzle) {
     Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
       if ((puzzle[index + 1].row == puzzle[indexInternal + 1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
         notPossibles.push(puzzle[indexInternal + 1].value);
-        // if (puzzle[indexInternal + 1].value == puzzle[index + 1].value) {
-        //   error = true;
-        // }
-      // console.log(possiblesToAdd);
       }
     });
     notPossibles = _.uniq(notPossibles);
     possiblesToAdd = _.difference(puzzle[index + 1].possibles, notPossibles);
     puzzle[index + 1].possibles = possiblesToAdd;
-    // if (possiblesToAdd.length === 0) {
-    //   error = true;
-    //   console.log("ERROR!!");
-    //   console.log('Error in check for possibles; shifting to next puzzle in puzzle states');
-    //   console.log(puzzleStates.length);
-    //   boardPrinter(puzzle);
-    //   possiblesToValue2(JSON.parse(puzzleStates.shift()));
-    // } else if (possiblesToAdd.length != 0) {
-    //   console.log ("No Error " + (index + 1));
-    // }
   }
   });
   boardPrinter(puzzle);
-  // console.log('done with possibles iterations')
-  // console.log(error);
   if (error) {
-    // possiblesToValue2(JSON.parse(puzzleStates.shift()));
-    // console.log('Error in check for possibles; shifting to next puzzle in puzzle states');
-    // boardPrinter(puzzle);
-    // console.log("?");
-    // console.log(puzzleStates.length);
+    console.log("Error in check for possibles");
+    // This If statement can probably be removed, as well as the var error and anything about the error in this function
   } else {
     console.log(error);
     console.log("no error; feeding puzzle into possiblesToValue2")
@@ -366,7 +296,6 @@ function possiblesToValue2(puzzle) {
     console.log('Error in values. Shifting to next puzzle in puzzle states.')
     solver(JSON.parse(puzzleStates.shift()));
   }
-  // boardPrinter(puzzle);
   else if (!badValue) {
     solver(puzzle);
   }
@@ -392,10 +321,4 @@ quadrantBuilder(puzzleToSolve);
 fillingInitialPossibles(puzzleToSolve);
 firstCheckForPossibles(puzzleToSolve);
 possiblesToValue(puzzleToSolve);
-// boardPrinter(puzzleToSolve);
-// console.log(puzzleToSolve);
 solver(puzzleToSolve);
-// order: solver, checkSolved, checkForPossibles, possiblesToValue2, solver
-// checkForPossibles(puzzle);
-// checkSolved(puzzle);
-// console.log(puzzle);
