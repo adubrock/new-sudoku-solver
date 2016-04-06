@@ -1,17 +1,18 @@
 'use strict'
 var _ = require('lodash');
 var data = ".3..1........427.3.2.9.6.4.5...2....349..............1.....9.....6....8...5..346.",
+// var data = ".94...13..............76..2.8..1.....32.........2...6.....5.4.......8..7..63.4..8",
+// var data = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7..",
+// var data = ".....7....9...1.......45..6....2.....36...41.5.....8.9........4....18....815...32",
+// var data = ".5247.....6............8.1.4.......97..95.....2..4..3....8...9......37.6....91...",
+// var data = ".9.........1..6....6..8..7.3......1.....39.......5...217.4...28.....3....86....57",
+// var data = ".....5....2...4.1..3..8..2......84..8..6......9..1.7.5..6......95...3.6...3.....1",
+// var data = "5...68..........6..42.5.......8..9....1....4.9.3...62.7....1..9..42....3.8.......",
+// var data = ".7..21..4....3....6.1.....2.......6...86..7.319.....4..1....2.842.9..............",
+// var data = "........1..7.5.3.9..48...2...........3...57....942.........3.....1...4.7.6.278...",
+// var data = ".....8..3.16.2.9.7.3...46...........9.5...2...2.13...9..3....2..7...5.........4..",
     dataArray = data.split(''),
     puzzleToSolve = {};
-    var row1 = '',
-        row2 = '',
-        row3 = '',
-        row4 = '',
-        row5 = '',
-        row6 = '',
-        row7 = '',
-        row8 = '',
-        row9 = '';
     var puzzleStates = [];
 
 
@@ -88,15 +89,15 @@ function quadrantBuilder(puzzle) {
 }
 
 function boardPrinter(puzzle) {
-  // var row1 = '',
-  //     row2 = '',
-  //     row3 = '',
-  //     row4 = '',
-  //     row5 = '',
-  //     row6 = '',
-  //     row7 = '',
-  //     row8 = '',
-  //     row9 = '';
+  var row1 = '',
+      row2 = '',
+      row3 = '',
+      row4 = '',
+      row5 = '',
+      row6 = '',
+      row7 = '',
+      row8 = '',
+      row9 = '';
   console.log(' –––––––––––');
   Object.keys(puzzle).forEach(function (value, index){
     if (index < 9) {
@@ -182,13 +183,15 @@ function checkSolved(puzzle) {
   });
   if (solved == false) {
     // console.log("Puzzle not solved. Try again.");
+    console.log('sending following puzzle to guess');
+    boardPrinter(puzzle);
     guess(puzzle);
     // boardPrinter(guessedPuzzle[0]);
     // var check = checkForPossibles(guessedPuzzle[0]);
     // console.log (check);
   } else if  (solved == true) {
     console.log("Puzzle Solved!");
-    console.log(puzzle);
+    // console.log(puzzle);
     boardPrinter(puzzle);
   }
 };
@@ -196,10 +199,11 @@ function checkSolved(puzzle) {
 function guess(puzzle) {
   var guessedPuzzle;
   var notGuessedPuzzle;
+  var thirdNotGuessedPuzzle;
   // var x;
   // var y;
   Object.keys(puzzle).forEach(function (value, index) {
-    if (puzzle[index + 1].possibles.length === 2 && !guessedPuzzle ) {
+    if (puzzle[index + 1].possibles.length === 2 && !guessedPuzzle) {
       guessedPuzzle = {};
       notGuessedPuzzle = {};
       // var stringy = JSON.stringify(puzzle);
@@ -223,63 +227,149 @@ function guess(puzzle) {
       notGuessedPuzzle[index + 1].possibles = [notGuessedPuzzle[index + 1].value];
       // console.log(notGuessedPuzzle[index +1].possibles)
       console.log('should run once');
+      console.log('guessed at ' + (index + 1));
       // return;
       // console.log(puzzle);
     }
   });
-  // console.log(x);
-  // guessedPuzzle[x].value = guessedPuzzle[x].possibles[0];
-  // console.log(notGuessedPuzzle[x]);
-  // notGuessedPuzzle[x].value = notGuessedPuzzle[x].possibles[1];
-  // console.log(notGuessedPuzzle[x]);
+  if (!guessedPuzzle) {
+    Object.keys(puzzle).forEach(function (value, index) {
+      if (puzzle[index + 1].possibles.length === 3 && !guessedPuzzle) {
+        guessedPuzzle = {};
+        notGuessedPuzzle = {};
+        thirdNotGuessedPuzzle = {};
+        // var stringy = JSON.stringify(puzzle);
+        guessedPuzzle = JSON.parse(JSON.stringify(puzzle));
+        notGuessedPuzzle = JSON.parse(JSON.stringify(puzzle));
+        thirdNotGuessedPuzzle = JSON.parse(JSON.stringify(puzzle));
+        // console.log(guessedPuzzle);
+        // Object.assign(guessedPuzzle, puzzle);
+        // Object.assign(notGuessedPuzzle, puzzle);
+        // x = (index + 1);
+        // guessedPuzzle = puzzle;
+        // notGuessedPuzzle = puzzle;
+        // console.log(notGuessedPuzzle[index + 1]);
+        guessedPuzzle[index + 1].value = guessedPuzzle[index + 1].possibles[0];
+        // console.log(notGuessedPuzzle[index + 1]);
+        notGuessedPuzzle[index + 1].value = notGuessedPuzzle[index + 1].possibles[1];
+        thirdNotGuessedPuzzle[index + 1].value = thirdNotGuessedPuzzle[index + 1].possibles[2];
+        // console.log(notGuessedPuzzle[index + 1]);
+        //
+        // console.log(guessedPuzzle[index +1].possibles)
+        guessedPuzzle[index + 1].possibles = [guessedPuzzle[index + 1].value];
+        // console.log(guessedPuzzle[index +1].possibles);
+        notGuessedPuzzle[index + 1].possibles = [notGuessedPuzzle[index + 1].value];
+        // console.log(notGuessedPuzzle[index +1].possibles)
+        thirdNotGuessedPuzzle[index + 1].possibles = [thirdNotGuessedPuzzle[index + 1].value];
+        console.log('should run once');
+        console.log('Three-way guessed at ' + (index + 1));
+        // return;
+        // console.log(puzzle);
+      }
+    });
+  }
+  if (!guessedPuzzle) {
+    console.log('guessed puzzle undefined');
+    console.log(puzzle);
+    possiblesToValue2(JSON.parse(puzzleStates.shift()));
 
-  // console.log(guessedPuzzle[index +1].possibles)
-  // guessedPuzzle[x].possibles = [guessedPuzzle[x].value];
-  // console.log(guessedPuzzle[index +1].possibles);
-  // notGuessedPuzzle[x].possibles = [notGuessedPuzzle[x].value];
-
-
-  // console.log(guessedPuzzle);
-  puzzleStates.push(notGuessedPuzzle);
-  // return [guessedPuzzle, notGuessedPuzzle];
-  checkForPossibles(guessedPuzzle);
+    // boardPrinter(puzzle);
+  }
+  else {
+    puzzleStates.push(JSON.stringify(notGuessedPuzzle));
+    if (thirdNotGuessedPuzzle) {
+      puzzleStates.push(JSON.stringify(thirdNotGuessedPuzzle));
+    }
+    console.log('pushed to puzzle states');
+    console.log('puzzle states length = ' + puzzleStates.length);
+    // return [guessedPuzzle, notGuessedPuzzle];
+    checkForPossibles(guessedPuzzle);
+  }
+  // puzzleStates.push(JSON.stringify(notGuessedPuzzle));
+  // if (thirdNotGuessedPuzzle) {
+  //   puzzleStates.push(JSON.stringify(thirdNotGuessedPuzzle));
+  // }
+  // console.log('pushed to puzzle states');
+  // console.log('puzzle states length = ' + puzzleStates.length);
+  // // return [guessedPuzzle, notGuessedPuzzle];
+  // checkForPossibles(guessedPuzzle);
 };
 
 function checkForPossibles(puzzle) {
   // console.log(puzzle);
+  var error = false;
   Object.keys(puzzle).forEach(function (value, index) {
   if (puzzle[index + 1].possibles.length != 1) {
     var notPossibles = [];
-    var possiblesToAdd = puzzle[index + 1].possibles;
+    var possiblesToAdd;
     Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
-      if ((puzzle[index + 1].row == puzzle[indexInternal +1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
+      if ((puzzle[index + 1].row == puzzle[indexInternal + 1].row) || (puzzle[index + 1].column == puzzle[indexInternal +1].column) || (puzzle[index +1].quadrant == puzzle[indexInternal + 1].quadrant)) {
         notPossibles.push(puzzle[indexInternal + 1].value);
-        notPossibles = _.uniq(notPossibles);
-        possiblesToAdd = _.difference(possiblesToAdd, notPossibles);        // console.log(possiblesToAdd);
+        // if (puzzle[indexInternal + 1].value == puzzle[index + 1].value) {
+        //   error = true;
+        // }
+      // console.log(possiblesToAdd);
       }
     });
+    notPossibles = _.uniq(notPossibles);
+    possiblesToAdd = _.difference(puzzle[index + 1].possibles, notPossibles);
     puzzle[index + 1].possibles = possiblesToAdd;
-    console.log(possiblesToAdd);
-    if (possiblesToAdd.length == 0) {
-      puzzle = puzzleStates.shift();
-      // console.log(possiblesToAdd);
-      console.log("ERROR!!");
-      // return puzzle;
-    }
+    // if (possiblesToAdd.length === 0) {
+    //   error = true;
+    //   console.log("ERROR!!");
+    //   console.log('Error in check for possibles; shifting to next puzzle in puzzle states');
+    //   console.log(puzzleStates.length);
+    //   boardPrinter(puzzle);
+    //   possiblesToValue2(JSON.parse(puzzleStates.shift()));
+    // } else if (possiblesToAdd.length != 0) {
+    //   console.log ("No Error " + (index + 1));
+    // }
   }
   });
-  console.log("did we get here?")
-  possiblesToValue2(puzzle);
+  boardPrinter(puzzle);
+  // console.log('done with possibles iterations')
+  // console.log(error);
+  if (error) {
+    // possiblesToValue2(JSON.parse(puzzleStates.shift()));
+    // console.log('Error in check for possibles; shifting to next puzzle in puzzle states');
+    // boardPrinter(puzzle);
+    // console.log("?");
+    // console.log(puzzleStates.length);
+  } else {
+    console.log(error);
+    console.log("no error; feeding puzzle into possiblesToValue2")
+    possiblesToValue2(puzzle);
+  }
 };
 
 function possiblesToValue2(puzzle) {
+  var badValue;
   Object.keys(puzzle).forEach(function (value, index) {
     if ((puzzle[index + 1].possibles.length == 1) && (puzzle[index + 1].value == '.')) {
       puzzle[index + 1].value = puzzle[index + 1].possibles.join();
     }
   });
+  Object.keys(puzzle).forEach(function (value, index) {
+    if (!badValue) {
+      Object.keys(puzzle).forEach(function (valueInternal, indexInternal) {
+        if ((puzzle[index + 1].value == puzzle[indexInternal + 1].value) && ((puzzle[index + 1].row == puzzle[indexInternal + 1].row) || (puzzle[index + 1].column == puzzle[indexInternal + 1].column) || (puzzle[index + 1].quadrant == puzzle[indexInternal + 1].quadrant)) && ((index + 1) != (indexInternal + 1)) && (puzzle[index + 1].value != '.'))  {
+          badValue = true;
+          console.log('Error value at index ' + (index + 1) + ' with ' + (indexInternal + 1));
+          console.log('Index ' + (index + 1) + ' value: ' + puzzle[index + 1].value + '; Index ' + (indexInternal + 1) + ' value: ' + puzzle[indexInternal + 1].value);
+          boardPrinter(puzzle);
+        }
+      });
+    }
+  });
+  console.log(badValue);
+  if (badValue) {
+    console.log('Error in values. Shifting to next puzzle in puzzle states.')
+    solver(JSON.parse(puzzleStates.shift()));
+  }
   // boardPrinter(puzzle);
-  solver(puzzle);
+  else if (!badValue) {
+    solver(puzzle);
+  }
 }
 // function slicingAndDicing(puzzle) {
 //   var column = sliceColumns(puzzle),
@@ -296,13 +386,14 @@ function possiblesToValue2(puzzle) {
 //
 // }
 
-// boardPrinter(puzzleToSolve);
+boardPrinter(puzzleToSolve);
 columnBuilder(puzzleToSolve);
 quadrantBuilder(puzzleToSolve);
 fillingInitialPossibles(puzzleToSolve);
 firstCheckForPossibles(puzzleToSolve);
 possiblesToValue(puzzleToSolve);
-// console.log(puzzle);
+// boardPrinter(puzzleToSolve);
+// console.log(puzzleToSolve);
 solver(puzzleToSolve);
 // order: solver, checkSolved, checkForPossibles, possiblesToValue2, solver
 // checkForPossibles(puzzle);
